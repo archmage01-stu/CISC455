@@ -27,13 +27,9 @@ def fitness_fun(individual,orders):
 
 
 
+    total_distance = 0
 
     for route in individual:
-        
-
-
-
-        total_distance = 0
         for i in range(len(route) - 1):
             total_distance += distance(route[i], route[i+1])
     

@@ -18,19 +18,21 @@ import matplotlib.pyplot as plt
 
 
 class create_orders():
-    def __init__(self):
+    def __init__(self,storesize,ordersize):
+        self.storesize = storesize
+        self.ordersize = ordersize
         self.store = self.genstore()
         self.orders =  self.genorders()
     def genstore(self):
         stores = []
-        for i in range(0,10):
+        for i in range(0,self.storesize):
             storexy = (random.randint(0,100),random.randint(0,100))
             stores.append(storexy)
         return stores
 
     def genorders(self):
         orders = []
-        for i in range(0,50):
+        for i in range(0,self.ordersize):
             keep_running = True
             while keep_running:
                 deliveryxy = (random.randint(0,100),random.randint(0,100))
@@ -43,19 +45,19 @@ def main():
    
     random.seed(42)
     numpy.random.seed(42)
-    O = create_orders()
+    O = create_orders(5,10)
     stores = O.store
     orders = O.orders
     random.seed()
     numpy.random.seed()
 
-    workers = 2
-    pop_size = 200
+    workers = 3
+    pop_size = 300
     mating_pool_size = int(pop_size*0.5) # has to be even
     tournament_size = 4
-    xover_rate = 0.7
+    xover_rate = 0.9
     mut_rate = 0.9
-    gen_limit = 100
+    gen_limit = 200
 
     print (orders)
 
