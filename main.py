@@ -52,14 +52,13 @@ def main():
     numpy.random.seed()
 
     workers = 3
-    pop_size = 300
+    pop_size = 200
     mating_pool_size = int(pop_size*0.5) # has to be even
     tournament_size = 4
     xover_rate = 0.9
     mut_rate = 0.9
     gen_limit = 200
 
-    print (orders)
 
     population = initialization.permutation(pop_size, workers, orders)
     gen = 0 # initialize the generation counter
@@ -83,9 +82,9 @@ def main():
                 off2 = population[parents_index[i+1]].copy()
                 
             if random.random() < mut_rate:
-                off1 = mutation.permutation_swap(off1)
+                off1 = mutation.permutation_swap(off1,orders)
             if random.random() < mut_rate:
-                off2 = mutation.permutation_swap(off2)
+                off2 = mutation.permutation_swap(off2,orders)
         
             offspring.append(off1)
             offspring_fitness.append(evaluation.fitness_fun(off1,orders))
