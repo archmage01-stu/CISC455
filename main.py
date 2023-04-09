@@ -14,6 +14,7 @@ import parent_selection
 import recombination
 import mutation
 import survivor_selection
+import matplotlib.pyplot as plt
 
 
 class create_orders():
@@ -97,6 +98,14 @@ def main():
         if fitness[i] == min(fitness):
             print("best solution", k, population[i], fitness[i])
             k = k+1
+            fig, ax = plt.subplots()
+            for i, population[i] in enumerate(population[i]):
+                x, y = zip(*population[i])
+                label = f'Route {i+1}'
+                ax.plot(x, y, label=label)
+            ax.set_title('All routes')
+            ax.legend()
+            plt.show()
 
 main()
 
