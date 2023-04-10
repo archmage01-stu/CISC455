@@ -7,32 +7,30 @@ Student name:Yifan Zhu
 
 #imports
 import math
+import routemain
 
-def distance(A,B):
-    x1, y1 = A
-    x2, y2 = B
-    distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-    return distance
+def unpack(individual,orders):
+    result = [[] for _ in range(max(individual)+1)]
+    for i, elem in enumerate(orders):
+        result[individual[i]].append(elem)
+    return result
 
-
-
-def fitness_fun(individual,orders): 
-    """Compute fitness of an invidual for the 8-queen puzzle (maximization)"""    
-    for o in orders:
-        for subroute in individual:
-            if o[0] in subroute and o[1] in subroute[subroute.index(o[0])+1:]:
-                break
-            else:
-                return 9999999999
-
-
-
+def fitness_fun(individual,orders,genpercent,all_fitness,all_solution): 
+    key1 = str(individual)
+    if key1 in all_fitness:
+        return all_fitness[key1]
     total_distance = 0
-
-    for route in individual:
-        for i in range(len(route) - 1):
-            total_distance += distance(route[i], route[i+1])
-    
+    result = unpack(individual,orders)
+    s = []
+    for deliveryman in result:
+        if deliveryman == []:
+            total_distance = total_distance
+        else:
+            solutions = routemain.main(deliveryman,genpercent)
+            total_distance = total_distance + solutions[0][0]
+            s.append(solutions[0][1])
+    all_solution.append([total_distance,s])
+    all_fitness[key1]=total_distance
 
 
     # student code end

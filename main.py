@@ -45,29 +45,32 @@ def main():
    
     random.seed(42)
     numpy.random.seed(42)
-    O = create_orders(5,10)
+    O = create_orders(7,20)
     stores = O.store
     orders = O.orders
     random.seed()
     numpy.random.seed()
 
     workers = 3
-    pop_size = 200
+    pop_size = 60
     mating_pool_size = int(pop_size*0.5) # has to be even
     tournament_size = 4
     xover_rate = 0.9
     mut_rate = 0.9
-    gen_limit = 200
+    gen_limit = 30
 
 
     population = initialization.permutation(pop_size, workers, orders)
     gen = 0 # initialize the generation counter
     fitness=[]
+    all_fitness = dict()
+    all_solution = []
     for i in range (0, pop_size):
-        fitness.append(evaluation.fitness_fun(population[i],orders))
-    print("generation", gen, ": best fitness", max(fitness), "\taverage fitness", sum(fitness)/len(fitness))
+        fitness.append(evaluation.fitness_fun(population[i],orders,1,all_fitness,all_solution))
+    print("generation", gen, ": best fitness", min(fitness), "\taverage fitness", sum(fitness)/len(fitness))
 
     while gen < gen_limit:
+        genpercent = (gen+1)/gen_limit
         parents_index = parent_selection.tournament(fitness, mating_pool_size, tournament_size)
         random.shuffle(parents_index)
         offspring =[]
@@ -82,26 +85,26 @@ def main():
                 off2 = population[parents_index[i+1]].copy()
                 
             if random.random() < mut_rate:
-                off1 = mutation.permutation_swap(off1,orders)
+                off1 = mutation.permutation_swap(off1)
             if random.random() < mut_rate:
-                off2 = mutation.permutation_swap(off2,orders)
+                off2 = mutation.permutation_swap(off2)
         
             offspring.append(off1)
-            offspring_fitness.append(evaluation.fitness_fun(off1,orders))
+            offspring_fitness.append(evaluation.fitness_fun(off1,orders,genpercent,all_fitness,all_solution))
             offspring.append(off2)
-            offspring_fitness.append(evaluation.fitness_fun(off2,orders))
+            offspring_fitness.append(evaluation.fitness_fun(off2,orders,genpercent,all_fitness,all_solution))
             i = i+2 
-        population, fitness = survivor_selection.mu_plus_lambda(population, fitness, offspring, offspring_fitness)
+        population, fitness = survivor_selection.mu_plus_lambda(population, fitness, offspring, offspring_fitness,int(0.8*pop_size),int(0.2*pop_size))
         gen = gen + 1  # update the generation counter
         print("generation", gen, ": best fitness", min(fitness), "average fitness", sum(fitness)/len(fitness))
     k = 0
-    for i in range (0, pop_size):
-        if fitness[i] == min(fitness):
-            print("best solution", k, population[i], fitness[i])
+    for i in range (0, len(all_solution)):
+        if all_solution[i][0] == min(fitness):
+            print("best solution", k, all_solution[i][1], all_solution[i][0])
             k = k+1
             fig, ax = plt.subplots()
-            for i, population[i] in enumerate(population[i]):
-                x, y = zip(*population[i])
+            for i, all_solution[i][1] in enumerate(all_solution[i][1]):
+                x, y = zip(*all_solution[i][1])
                 label = f'Route {i+1}'
                 ax.plot(x, y, label=label)
             ax.set_title('All routes')
