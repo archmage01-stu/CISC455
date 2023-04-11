@@ -20,7 +20,7 @@ def main(orders,genpercent,verbose = 0):
 
     factor = int(genpercent / 0.2)
 
-    pop_size =  100
+    pop_size =  200
     mating_pool_size = int(pop_size*0.5) # has to be even
     tournament_size = 4
     xover_rate = 0.9
@@ -65,6 +65,8 @@ def main(orders,genpercent,verbose = 0):
             i = i+2 
         population, fitness = routesurvivor_selection.mu_plus_lambda(population, fitness, offspring, offspring_fitness,mu,lam)
         gen = gen + 1  # update the generation counter
+        print("route generation", gen, ": best fitness", min(fitness), "average fitness", sum(fitness)/len(fitness))
+
         if best_result is None or min(fitness) < best_result:
             best_result =  min(fitness)
             iterations_without_improvement = 0

@@ -96,7 +96,7 @@ def main():
             i = i+2 
         population, fitness = survivor_selection.mu_plus_lambda(population, fitness, offspring, offspring_fitness,int(0.8*pop_size),int(0.2*pop_size))
         gen = gen + 1  # update the generation counter
-        print("generation", gen, ": best fitness", min(fitness), "average fitness", sum(fitness)/len(fitness))
+        print("main generation", gen, ": best fitness", min(fitness), "average fitness", sum(fitness)/len(fitness))
     k = 0
     for i in range (0, len(all_solution)):
         if all_solution[i][0] == min(fitness):
