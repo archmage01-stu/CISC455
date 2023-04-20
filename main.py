@@ -140,6 +140,7 @@ def main():
     ax2.legend()
     ax2.set_xlabel('generations')
     ax2.set_ylabel('route distance')
+    ax2.set_ylim([0, 1000])
     fig2.savefig('gen comparison.png',dpi = 500)
 
 main()
