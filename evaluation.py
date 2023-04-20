@@ -15,7 +15,7 @@ def unpack(individual,orders):
         result[individual[i]].append(elem)
     return result
 
-def fitness_fun(individual,orders,genpercent,all_fitness,all_solution): 
+def fitness_fun(individual,orders,all_fitness,all_solution,routehis,routere,routesurvivor): 
     key1 = str(individual)
     if key1 in all_fitness:
         return all_fitness[key1]
@@ -26,7 +26,7 @@ def fitness_fun(individual,orders,genpercent,all_fitness,all_solution):
         if deliveryman == []:
             total_distance = total_distance
         else:
-            solutions = routemain.main(deliveryman,genpercent)
+            solutions = routemain.main(deliveryman,routehis,routere,routesurvivor)
             total_distance = total_distance + solutions[0][0]
             s.append(solutions[0][1])
     all_solution.append([total_distance,s])

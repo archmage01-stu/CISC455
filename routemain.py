@@ -14,13 +14,12 @@ import routesurvivor_selection
 import matplotlib.pyplot as plt
 
    
-def main(orders,genpercent,verbose = 0):
+def main(orders,routehis,routere,routesurvivor,verbose = 0):
     random.seed()
     numpy.random.seed()
 
-    factor = int(genpercent / 0.2)
 
-    pop_size =  200
+    pop_size =  100
     mating_pool_size = int(pop_size*0.5) # has to be even
     tournament_size = 4
     xover_rate = 0.9
@@ -39,7 +38,7 @@ def main(orders,genpercent,verbose = 0):
     best_result = None
     current_result = 0.0
 
-    while iterations_without_improvement < 5 and gen < gen_limit:
+    while iterations_without_improvement < 10 and gen < gen_limit:
         parents_index = routeparent_selection.tournament(fitness, mating_pool_size, tournament_size)
         random.shuffle(parents_index)
         offspring =[]
@@ -47,8 +46,11 @@ def main(orders,genpercent,verbose = 0):
         i= 0
         while len(offspring) < mating_pool_size:
         
-            if random.random() < xover_rate:            
-                off1,off2 = routerecombination.pmx(population[parents_index[i]], population[parents_index[i+1]])
+            if random.random() < xover_rate:
+                if routere =='heuristic':
+                    off1,off2 = routerecombination.heuristic_crossover(population[parents_index[i]], population[parents_index[i+1]])
+                elif routere == 'pmx':
+                    off1,off2 = routerecombination.pmx(population[parents_index[i]], population[parents_index[i+1]])
             else:
                 off1 = population[parents_index[i]].copy()
                 off2 = population[parents_index[i+1]].copy()
@@ -63,10 +65,12 @@ def main(orders,genpercent,verbose = 0):
             offspring.append(off2)
             offspring_fitness.append(routeevaluation.fitness_fun(off2,orders))
             i = i+2 
-        population, fitness = routesurvivor_selection.mu_plus_lambda(population, fitness, offspring, offspring_fitness,mu,lam)
+        if routesurvivor == 'mu+lambda':
+            population, fitness = routesurvivor_selection.mu_plus_lambda(population, fitness, offspring, offspring_fitness,mu,lam)
+        elif routesurvivor == 'sus':
+            population, fitness = routesurvivor_selection.sus(population, fitness, offspring, offspring_fitness)
         gen = gen + 1  # update the generation counter
-        print("route generation", gen, ": best fitness", min(fitness), "average fitness", sum(fitness)/len(fitness))
-
+        routehis.append(min(fitness))
         if best_result is None or min(fitness) < best_result:
             best_result =  min(fitness)
             iterations_without_improvement = 0

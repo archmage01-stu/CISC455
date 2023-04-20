@@ -59,16 +59,3 @@ def tournament(fitness, mating_pool_size, tournament_size):
     
     return selected_to_mate
 
-
-def random_uniform (population_size, mating_pool_size):
-    """Random uniform selection"""
-
-    selected_to_mate = []
-
-    # student code starts
-    selected_to_mate = random.sample(range(0,population_size),mating_pool_size)
-
-    # student code ends
-    
-    return selected_to_mate
-

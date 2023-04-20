@@ -6,6 +6,8 @@ A genetic algorithm for the eight queens puzzle
 # imports
 import random
 import numpy
+import itertools
+import matplotlib.pyplot as plt
 
 # import your own modules
 import initialization
@@ -14,7 +16,6 @@ import parent_selection
 import recombination
 import mutation
 import survivor_selection
-import matplotlib.pyplot as plt
 
 
 class create_orders():
@@ -41,7 +42,7 @@ class create_orders():
             orders.append([random.sample(self.store,1)[0],deliveryxy])
         return orders
    
-def main():
+def ga(survivor,routere,routesurvivor):
    
     random.seed(42)
     numpy.random.seed(42)
@@ -65,12 +66,13 @@ def main():
     fitness=[]
     all_fitness = dict()
     all_solution = []
+    his = []
+    routehis = []
     for i in range (0, pop_size):
-        fitness.append(evaluation.fitness_fun(population[i],orders,1,all_fitness,all_solution))
+        fitness.append(evaluation.fitness_fun(population[i],orders,all_fitness,all_solution,routehis,routere,routesurvivor))
     print("generation", gen, ": best fitness", min(fitness), "\taverage fitness", sum(fitness)/len(fitness))
 
     while gen < gen_limit:
-        genpercent = (gen+1)/gen_limit
         parents_index = parent_selection.tournament(fitness, mating_pool_size, tournament_size)
         random.shuffle(parents_index)
         offspring =[]
@@ -90,13 +92,17 @@ def main():
                 off2 = mutation.permutation_swap(off2)
         
             offspring.append(off1)
-            offspring_fitness.append(evaluation.fitness_fun(off1,orders,genpercent,all_fitness,all_solution))
+            offspring_fitness.append(evaluation.fitness_fun(off1,orders,all_fitness,all_solution,routehis,routere,routesurvivor))
             offspring.append(off2)
-            offspring_fitness.append(evaluation.fitness_fun(off2,orders,genpercent,all_fitness,all_solution))
+            offspring_fitness.append(evaluation.fitness_fun(off2,orders,all_fitness,all_solution,routehis,routere,routesurvivor))
             i = i+2 
-        population, fitness = survivor_selection.mu_plus_lambda(population, fitness, offspring, offspring_fitness,int(0.8*pop_size),int(0.2*pop_size))
+        if survivor == 'mu+lambda':
+            population, fitness = survivor_selection.mu_plus_lambda(population, fitness, offspring, offspring_fitness,int(0.8*pop_size),int(0.2*pop_size))
+        elif survivor == 'sus':
+            population, fitness = survivor_selection.sus(population, fitness, offspring, offspring_fitness)
         gen = gen + 1  # update the generation counter
-        print("main generation", gen, ": best fitness", min(fitness), "average fitness", sum(fitness)/len(fitness))
+        his.append(min(fitness))
+        print("generation", gen, ": best fitness", min(fitness), "average fitness", sum(fitness)/len(fitness))
     k = 0
     for i in range (0, len(all_solution)):
         if all_solution[i][0] == min(fitness):
@@ -107,9 +113,34 @@ def main():
                 x, y = zip(*all_solution[i][1])
                 label = f'Route {i+1}'
                 ax.plot(x, y, label=label)
-            ax.set_title('All routes')
+            ax.set_title('All routes '+ survivor +' '+routere + ' '+ routesurvivor)
             ax.legend()
-            plt.show()
+            fig.savefig('All routes '+ survivor +' '+routere + ' '+ routesurvivor+'.png',dpi = 500)
+    
+    
+    return his, routehis
+
+def main():
+    #ga('mu+lambda','mu+lambda')
+
+
+    survivor = ['mu+lambda','sus']
+    routere = ['heuristic','pmx']
+    routesurvivor = ['mu+lambda','sus']
+
+    combinations = list(itertools.product(survivor,routere, routesurvivor))
+
+    print(combinations)
+    allhis = []
+    fig2, ax2 = plt.subplots()
+    for e in combinations:
+        his,routehis = ga(e[0],e[1],e[2])
+        ax2.plot(range(len(his)), his, label = e[0]+' & '+e[1]+' & '+e[2])
+        print(e[0]+' & '+e[1]+' & '+e[2]+': caculated '+str(len(routehis)) + ' gens')
+    ax2.legend()
+    ax2.set_xlabel('generations')
+    ax2.set_ylabel('route distance')
+    fig2.savefig('gen comparison.png',dpi = 500)
 
 main()
 
