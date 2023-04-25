@@ -10,6 +10,7 @@ def vaildcheck(individual,orders):
     return True
 
 def permutation_swap (individual):
+    # exchange two randomly selected positions in an individual
 
     mutant = individual.copy()
     pos1 = random.randint(0, len(individual)-1)

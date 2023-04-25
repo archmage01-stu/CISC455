@@ -29,6 +29,5 @@ def fitness_fun(individual,orders,all_fitness,all_solution,routehis,routere,rout
     all_fitness[key1]=total_distance
 
 
-    # student code end
     return total_distance
 

@@ -7,7 +7,7 @@ def distance(A,B):
     x2, y2 = B
     distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
     return distance
-
+    # calculate the Euclidean distance between two points A and B
 def fitness_fun(individual,orders): 
     for o in orders:
         if o[0] in individual and o[1] in individual[individual.index(o[0])+1:]:

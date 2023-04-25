@@ -2,7 +2,7 @@ import random
 
 
 def tournament(fitness, mating_pool_size, tournament_size):
-
+    # using the tournament selection method to select individuals from the population for breeding
     selected_to_mate = []
 
     current = 1
