@@ -1,15 +1,8 @@
-"""
-CISC455/851 A1
-A genetic algorithm for the eight queens puzzle
-"""
-
-# imports
 import random
 import numpy
 import itertools
 import matplotlib.pyplot as plt
 
-# import your own modules
 import initialization
 import evaluation
 import parent_selection
@@ -17,7 +10,7 @@ import recombination
 import mutation
 import survivor_selection
 
-
+#create fake orders
 class create_orders():
     def __init__(self,storesize,ordersize):
         self.storesize = storesize
@@ -43,7 +36,7 @@ class create_orders():
         return orders
    
 def ga(survivor,routere,routesurvivor):
-   
+    #use random seed to make sure random orders are the same every time
     random.seed(42)
     numpy.random.seed(42)
     O = create_orders(7,20)
@@ -51,7 +44,7 @@ def ga(survivor,routere,routesurvivor):
     orders = O.orders
     random.seed()
     numpy.random.seed()
-
+    #set parameters
     workers = 3
     pop_size = 60
     mating_pool_size = int(pop_size*0.5) # has to be even
@@ -60,9 +53,10 @@ def ga(survivor,routere,routesurvivor):
     mut_rate = 0.9
     gen_limit = 30
 
-
+    #initialize the population
     population = initialization.permutation(pop_size, workers, orders)
-    gen = 0 # initialize the generation counter
+    gen = 0
+    #initialize the result we need to save
     fitness=[]
     all_fitness = dict()
     all_solution = []
@@ -104,6 +98,7 @@ def ga(survivor,routere,routesurvivor):
         his.append(min(fitness))
         print("generation", gen, ": best fitness", min(fitness), "average fitness", sum(fitness)/len(fitness))
     k = 0
+    #plot and save the route
     for i in range (0, len(all_solution)):
         if all_solution[i][0] == min(fitness):
             print("best solution", k, all_solution[i][1], all_solution[i][0])
@@ -121,9 +116,7 @@ def ga(survivor,routere,routesurvivor):
     return his, routehis
 
 def main():
-    #ga('mu+lambda','mu+lambda')
-
-
+    #define all combinations
     survivor = ['mu+lambda','sus']
     routere = ['heuristic','pmx']
     routesurvivor = ['mu+lambda','sus']
@@ -131,6 +124,7 @@ def main():
     combinations = list(itertools.product(survivor,routere, routesurvivor))
 
     print(combinations)
+    #run and plot all result in one figure.
     allhis = []
     fig2, ax2 = plt.subplots()
     for e in combinations:

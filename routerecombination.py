@@ -1,11 +1,3 @@
-"""
-My collection of recombination methods
-
-Student number:20146990
-Student name:Yifan Zhu
-"""
-
-#imports
 import random
 
 import math
@@ -67,17 +59,17 @@ def heuristic_crossover(parent1, parent2):
     offspring1 = [-1] * n
     offspring2 = [-1] * n
 
-    # Step 1: Randomly select a starting point
+    #Randomly select a starting point
     start = random.randint(0, n-1)
     offspring1[0] = parent1[start]
     offspring2[0] = parent2[start]
 
-    # Step 2: Copy the starting point
+    #Copy the starting point
     current_index = start
 
-    # Step 3-4: Find the nearest city not already in the offspring
+    #Find the nearest city not already in the offspring
     for i in range(1, n):
-        # Offspring 1
+        #Offspring 1
         distances = [distance(parent1[current_index], x) for x in parent1]
         sorted_indices = sorted(range(len(distances)), key=lambda k: distances[k])
         for index in sorted_indices:
@@ -86,7 +78,7 @@ def heuristic_crossover(parent1, parent2):
                 current_index = index
                 break
 
-        # Offspring 2
+        #Offspring 2
         distances = [distance(parent2[current_index], x) for x in parent2]
         sorted_indices = sorted(range(len(distances)), key=lambda k: distances[k])
         for index in sorted_indices:

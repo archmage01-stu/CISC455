@@ -1,10 +1,7 @@
-
-# imports
 import random
 import numpy
 import math
 
-# import your own modules
 import routeinitialization
 import routeevaluation
 import routeparent_selection
@@ -20,7 +17,7 @@ def main(orders,routehis,routere,routesurvivor,verbose = 0):
 
 
     pop_size =  100
-    mating_pool_size = int(pop_size*0.5) # has to be even
+    mating_pool_size = int(pop_size*0.5)
     tournament_size = 4
     xover_rate = 0.9
     mut_rate = 0.9
@@ -29,7 +26,7 @@ def main(orders,routehis,routere,routesurvivor,verbose = 0):
     lam = int(0.2*pop_size)
 
     population = routeinitialization.permutation(pop_size, orders)
-    gen = 0 # initialize the generation counter
+    gen = 0 
     fitness=[]
     for i in range (0, pop_size):
         fitness.append(routeevaluation.fitness_fun(population[i],orders))

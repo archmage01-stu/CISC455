@@ -1,21 +1,17 @@
-"""
-My collection of fitness evaluation methods
-
-Student number:20146990
-Student name:Yifan Zhu
-"""
-
-#imports
 import math
 import routemain
 
+#This function will unpack the orders inorder to pass them separately
 def unpack(individual,orders):
     result = [[] for _ in range(max(individual)+1)]
     for i, elem in enumerate(orders):
         result[individual[i]].append(elem)
     return result
 
+#use another gentic algorithm to evaluate fitness
 def fitness_fun(individual,orders,all_fitness,all_solution,routehis,routere,routesurvivor): 
+
+    #if the result has been evulated before, we use the result we stored
     key1 = str(individual)
     if key1 in all_fitness:
         return all_fitness[key1]
@@ -36,8 +32,3 @@ def fitness_fun(individual,orders,all_fitness,all_solution,routehis,routere,rout
     # student code end
     return total_distance
 
-
-#fitnesstest = [8,7,6,1,2,5,3,4]
-#fitness_8queen(fitnesstest)
-
-#write an function that check list c visited all coord and visited pos[n][0] before pos[n][1]

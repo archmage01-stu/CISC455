@@ -1,16 +1,7 @@
-"""
-My collection of survivor selection methods
-
-Student number:20146990
-Student name:Yifan Zhu
-"""
-
-#imports
 import random
 
 
 def mu_plus_lambda(current_pop, current_fitness, offspring, offspring_fitness,mu,lam):
-    """mu+lambda selection"""
     population = []
     fitness = []
     combined_pop = current_pop + offspring
@@ -34,18 +25,18 @@ def sus(current_pop, current_fitness, offspring, offspring_fitness):
             offspring = offspring[:i]
             offspring_fitness = offspring_fitness[:i]
             break
-    # combine the current population and offspring into a single list
+    #combine the current population and offspring into a single list
     k = len(current_pop)
     population = current_pop + offspring
     fitness = [1/f for f in current_fitness + offspring_fitness]
-    # calculate the total fitness of the population
+    #calculate the total fitness of the population
     total_fitness = sum(fitness)
-    # calculate the distance between pointers
+    #calculate the distance between pointers
     distance = total_fitness / k
-    # generate a random starting point
+    #generate a random starting point
     start = random.uniform(0, distance)
     cumulative_fitness = fitness[0]
-    # select the individuals using Stochastic Universal Sampling
+    #select the individuals using Stochastic Universal Sampling
     selected_pop = []
     selected_fitness = []
     current_point = start

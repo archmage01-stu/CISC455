@@ -1,11 +1,3 @@
-"""
-My collection of recombination methods
-
-Student number:20146990
-Student name:Yifan Zhu
-"""
-
-#imports
 import random
 
 def repair_permutation(offspring, parent):
@@ -24,7 +16,6 @@ def repair_permutation(offspring, parent):
 def permutation_cut_and_crossfill (parent1, parent2):
     pos = random.randint(0, len(parent1) - 1)
 
-    # Perform the crossover
     offspring1 = parent1[:pos] + parent2[pos:]
     offspring2 = parent2[:pos] + parent1[pos:]
 
